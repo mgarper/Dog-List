@@ -11,3 +11,10 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+#root .interaction {
+  display: flex;
+  justify-content: center;
+  align-content: flex-end;
+  gap: 50px;
+}

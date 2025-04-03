@@ -1,0 +1,26 @@
+.dropdownContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .dropdownLabel {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #b0b0b0; /* Light gray for better visibility */
+  }
+  
+  .dropdownSelect {
+    padding: 10px;
+    border: 1px solid white; /* Darker border to match the theme */
+    border-radius: 12px;
+    color: #fff; /* White text for contrast */
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+  }
+  
+
+  

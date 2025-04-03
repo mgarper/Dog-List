@@ -1,33 +1,37 @@
-import React, { use } from "react";
-import './PrimaryButton.module.css'
-import { useState } from 'react'
+import React from "react";
+import './PrimaryButton.module.css';
+import styles from './PrimaryButton.module.css';
+import { useState } from 'react';
 
 interface ButtonProps {
   text: string;
   onClick?: () => void;
-  type?: "button" | "submit" | "reset" ;
+  type?: "button" | "submit" | "reset";
   isFilter: boolean;
+  isActive?: boolean; // Track whether the button is active or not
 }
 
-const PrimaryButton: React.FC<ButtonProps> = ({ text, onClick, type = "button" , isFilter}) => {
-    const [isActive, setIsActive] = useState(false)
-    const onClickHandler = () => {
-        if (onClick) {
-            onClick()
-        }
-        
-        if (isFilter) {
-            let value = isActive ? false : true
-            setIsActive(value)
-            console.log("llegué")
-        }
+const PrimaryButton: React.FC<ButtonProps> = ({ text, onClick, type = "button", isFilter, isActive }) => {
+    const [active, setActive] = useState(isActive)
+  const onClickHandler = () => {
+    if (onClick) {
+      onClick();
     }
+    if (isFilter) {
+        let value = active
+        setActive(!value)
+    }
+  };
 
-    return (
-        <button onClick={onClickHandler} type={type} className={isActive ? "active" : ""}>
-            {text}
-        </button>
-    );
+  return (
+    <button 
+      onClick={onClickHandler} 
+      type={type} 
+      className={active ? styles.active : ""}
+    >
+      {text}
+    </button>
+  );
 };
 
 export default PrimaryButton;
