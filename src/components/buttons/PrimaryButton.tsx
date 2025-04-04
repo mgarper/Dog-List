@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 interface ButtonProps {
   text: string;
-  onClick?: () => void;
+  onClick?: (num? : number) => void;
   type?: "button" | "submit" | "reset";
   isFilter: boolean;
   isActive?: boolean; // Track whether the button is active or not

@@ -12,12 +12,12 @@ type DogDataType = {
   breed: string; 
   imgUrl: any; 
   dislikeCount: number; 
-  likeCount: number 
+  likeCount: number; 
 }
 
 type FilterType = {
   breed: string[];
-  vote: string;
+  vote: boolean[];
 }
 
 function App() {
@@ -25,9 +25,12 @@ function App() {
   const [dropdownContent, setDropdownContent] = useState<string[]>([])
   const [dogList, setDogList] = useState<DogDataType[]>([])
   const [dogBreeds, setDogBreeds] = useState<string[]>([])
-  const [appliedFilters, setAppliedFilters] = useState<FilterType>({ breed: [], vote: "" })
+  const [appliedFilters, setAppliedFilters] = useState<FilterType>({ breed: [], vote: [false,false] })
 
   async function dropdownLoad() {
+    if(dropdownContent.length !== 0) {
+      return
+    }
     let list = await Api.listAllBreeds()
     if (list) {
       let array : string[] = ["random"]
@@ -58,12 +61,14 @@ function App() {
       for(let i=0; i < times; i++) {
         let url = await Api.getRandomDogImage(breed)
         if (url) {
-          breeds.push(url.breed)
+          if (!breeds.includes(url.breed)) {
+            breeds.push(url.breed)
+          }
           dogs.push(url)
         }
       }
-      setDogList(dogs)
-      setDogBreeds(breeds)
+      setDogList([...dogs])
+      setDogBreeds([...breeds])
     } else {
       let url = await Api.getRandomDogImage(breed)
       if (url) {
@@ -81,12 +86,14 @@ function App() {
       for(let i=0; i < times; i++) {
         let url = await Api.getRandomDogImage(breed)
         if (url) {
-          breeds.push(url.breed)
+          if (!breeds.includes(url.breed)) {
+            breeds.push(url.breed)
+          }
           dogs.unshift(url)
         }
       }
-      setDogList(dogs)
-      setDogBreeds(breeds)
+      setDogList([...dogs])
+      setDogBreeds([...breeds])
     } else {
       let url = await Api.getRandomDogImage(breed)
       if (url) {
@@ -112,9 +119,21 @@ function App() {
         filterArray[type].push(value)
       }
     } else {
-
+      const vote = value === "Cute" ? 0 : 1
+      filterArray[type][vote] = !filterArray[type][vote]
     }
     setAppliedFilters(filterArray)
+  }
+
+  function updateVoteList(id: number, vote: string) {
+    let dogs: DogDataType[] = [...dogList]
+    let index = dogs.findIndex((dog) => dog.id === id)
+    if (vote === "like") {
+      dogs[index].likeCount++
+    } else {
+      dogs[index].dislikeCount++
+    }
+    setDogList([...dogs])
   }
 
   return (
@@ -152,17 +171,35 @@ function App() {
         }
       </div>
       <div className='gallery'>
-      {
-        dogList.map((dog, index) => {
-          let filters = appliedFilters
-          let breedFilters = filters.breed
-          let voteFilters = filters.vote
-          if ((breedFilters.length === 0 || breedFilters.includes(dog.breed)) && (voteFilters.length === 0 || voteFilters.includes(dog.breed))) {
-            return <Card key={index} url={dog.imgUrl}></Card>;
-          }
-          return null;
-        })
-      }
+        {
+          dogList.map((dog) => {
+            let filters = appliedFilters;
+            let breedFilters = filters.breed;
+            let voteFilters = filters.vote;
+
+            if (
+              breedFilters.length === 0 || breedFilters.includes(dog.breed)
+            ) {
+              if (voteFilters[0] === true && voteFilters[1] === false && dog.likeCount <= dog.dislikeCount) {
+                return null; 
+              }
+              if (voteFilters[0] === false && voteFilters[1] === true && dog.likeCount >= dog.dislikeCount) {
+                return null; 
+              }
+              return (
+                <Card
+                  id={dog.id}
+                  url={dog.imgUrl}
+                  n_likes={dog.likeCount}
+                  n_dislikes={dog.dislikeCount}
+                  onClick={updateVoteList}
+                />
+              );
+            }
+            
+            return null;
+          })
+        }
       </div>
     </>
   )

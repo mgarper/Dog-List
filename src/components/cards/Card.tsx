@@ -6,21 +6,27 @@ import PrimaryButton from "../buttons/PrimaryButton";
 import styles from "./Card.module.css"
 
 type CardProps = {
+    id: number;
     url: string;
+    n_likes: number;
+    n_dislikes: number;
+    onClick?: (num: number, vote: string) => void;
 }
 
-const Card: React.FC<CardProps> = ({url}) => {
+const Card: React.FC<CardProps> = ({id, url, n_likes, n_dislikes, onClick}) => {
     const [likes, setLikes] = useState(0)
     const [dislikes, setDislikes] = useState(0)
 
     const handleOnClickCute = () => {
         let count = likes
         setLikes(count + 1)
+        if (onClick) onClick(id, "like")
     }
 
     const handleOnClickUgly = () => {
         let count = dislikes
         setDislikes(count + 1)
+        if (onClick) onClick(id, "dislike")
     }
 
     return (
@@ -28,11 +34,11 @@ const Card: React.FC<CardProps> = ({url}) => {
         <div className={styles.container}>
             <img src={url} alt="" />
             <div>
-            <p><span>{likes}</span>❤️ <span>{dislikes}</span>🤮</p>
+            <p><span>{n_likes}</span>❤️ <span>{n_dislikes}</span>🤮</p>
             </div>
             <div>
-                <PrimaryButton text="Cute af" onClick={handleOnClickCute}></PrimaryButton>
-                <PrimaryButton text="Ugly ahh boi" onClick={handleOnClickUgly}></PrimaryButton>
+                <PrimaryButton text="Cute af" onClick={handleOnClickCute} isFilter={false}></PrimaryButton>
+                <PrimaryButton text="Ugly ahh boi" onClick={handleOnClickUgly} isFilter={false}></PrimaryButton>
             </div>
         </div>
     </>)

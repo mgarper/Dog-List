@@ -1,3 +1,5 @@
+let i = 0
+
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -52,12 +54,14 @@ async function getRandomDogImage(breed: string) {
       extractedBreed = match ? match[1] : "Unknown";
     }
 
+    let id = i
+    i++
     return {
-      id: Date.now() + Math.random(),
+      id: id,
       breed: formatDogBreed(extractedBreed),
       imgUrl: image,
-      dislikeCount: getRandomInt(0, 2),
-      likeCount: getRandomInt(0, 1),
+      dislikeCount: 0,
+      likeCount: 0,
     };
   } catch (error) {
     console.error("Error fetching dog image:", error);
