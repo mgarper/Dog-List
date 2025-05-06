@@ -12,7 +12,7 @@ interface ButtonProps {
 }
 
 const PrimaryButton: React.FC<ButtonProps> = ({ text, onClick, type = "button", isFilter, isActive }) => {
-    const [active, setActive] = useState(isActive)
+  const [active, setActive] = useState(isActive)
   const onClickHandler = () => {
     if (onClick) {
       onClick();

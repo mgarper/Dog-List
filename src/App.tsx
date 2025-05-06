@@ -151,7 +151,6 @@ function App() {
           <PrimaryButton text='Add 5 to the end' onClick={() => DogEndHandler(5)} isFilter={false}></PrimaryButton>
           <PrimaryButton text='Add 5 to the beginning' onClick={() => DogBeginningHandler(5)} isFilter={false}></PrimaryButton>
         </div>
-        
       </div>
       <div>
         {
